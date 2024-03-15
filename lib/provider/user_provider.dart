@@ -14,7 +14,6 @@ class UserProvider extends ChangeNotifier {
   List<UserModel> userList = [];
 
   final _apiClient = Api();
-  dynamic _data;
   String _errorMessage = '';
   AppState _state = AppState.loading;
 
