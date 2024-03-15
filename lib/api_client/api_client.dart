@@ -1,13 +1,26 @@
 import 'package:dio/dio.dart';
 
-class ApiClient {
+class Api {
   final Dio _dio = Dio();
 
-  Future<Response> getUsers() async {
+  Future<Response<T>> client<T>(
+    RequestOptions options,
+  ) async {
     try {
-      return await _dio.get('https://reqres.in/api/users');
-    } catch (error) {
-      throw Exception('Failed to load users');
+      final response = await _dio.request<T>(options.path,
+          data: options.data,
+          queryParameters: options.queryParameters,
+          options: Options(
+            method: options.method,
+          ));
+      return response;
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response?.statusCode == 401) {}
+        if (e.response?.statusCode == 404) {}
+        if (e.response!.statusCode! >= 500) {}
+      }
+      return Future.error(e);
     }
   }
 }
